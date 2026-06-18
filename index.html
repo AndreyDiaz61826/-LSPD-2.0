@@ -3,136 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arizona RP | Форум LSPD</title>
+    <title>LSPD Portal | Arizona Mobile 3</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0d0e12; color: #e2e8f0; }
-        .arizona-header { background-color: #161920; border-bottom: 1px solid #222735; }
-        .arizona-card { background-color: #151821; border: 1px solid #1d222f; border-radius: 16px; }
-        .arizona-subcard { background-color: #11131a; border: 1px solid #1c202b; border-radius: 14px; }
-        .arizona-input { background-color: #0d0e12; border: 1px solid #222735; }
-        .arizona-input:focus { border-color: #e53e3e; outline: none; }
+        body { 
+            font-family: 'Ubuntu', sans-serif; 
+            background-color: #060814; 
+            color: #f1f5f9; 
+        }
+        /* Полицейский стиль панелей */
+        .lspd-header { 
+            background: linear-gradient(180deg, #0f172a 0%, #0b0f19 100%); 
+            border-bottom: 2px solid #1e3a8a; 
+        }
+        .lspd-card { 
+            background: rgba(15, 23, 42, 0.6); 
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(30, 58, 138, 0.4); 
+            border-radius: 16px; 
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+        .lspd-subcard { 
+            background: #0f172a; 
+            border-left: 4px solid #3b82f6; 
+            border-radius: 8px; 
+        }
+        .lspd-input { 
+            background: #020617; 
+            border: 1px solid #1e3a8a; 
+            transition: all 0.3s;
+        }
+        .lspd-input:focus { 
+            border-color: #3b82f6; 
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+            outline: none; 
+        }
         
-        .role-leader { color: #5B21B6; font-weight: 700; text-shadow: 0 0 5px rgba(91,33,182,0.3); }
-        .role-deputy { color: #15803D; font-weight: 700; text-shadow: 0 0 5px rgba(21,128,61,0.3); }
-        .role-high { color: #1E3A8A; font-weight: 600; }
-        .role-officer { color: #D97706; font-weight: 600; }
-        .role-user { color: #4B5563; font-weight: 500; }
+        /* Стили фракционных ролей */
+        .role-leader { color: #ef4444; font-weight: 700; text-shadow: 0 0 8px rgba(239,68,68,0.4); }
+        .role-deputy { color: #3b82f6; font-weight: 700; text-shadow: 0 0 8px rgba(59,130,246,0.4); }
+        .role-high { color: #60a5fa; font-weight: 600; }
+        .role-officer { color: #94a3b8; font-weight: 500; }
+        .role-user { color: #64748b; font-weight: 500; }
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0d0e12; }
-        ::-webkit-scrollbar-thumb { background: #222735; border-radius: 10px; }
+        /* Кастомный скроллбар */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e3a8a; border-radius: 10px; }
     </style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden max-w-md mx-auto border-x border-[#1d222f] shadow-2xl">
+<body class="h-screen flex flex-col overflow-hidden max-w-md mx-auto border-x border-[#1e3a8a]/30 shadow-2xl relative">
 
-    <!-- HEADER -->
-    <header class="arizona-header px-4 py-3 flex justify-between items-center shrink-0">
-        <div class="flex items-center gap-4">
-            <i class="fa-solid fa-bars text-xl text-gray-400 cursor-pointer"></i>
-            <div class="flex items-center justify-center w-8 h-8 rounded-lg font-black text-xl italic tracking-tighter" style="background: linear-gradient(135deg, #e11d48, #2563eb); color: #fff;">A</div>
-        </div>
-        <div class="flex items-center gap-5 text-gray-400">
-            <!-- Кликабельная Аватарка -->
-            <div onclick="changeAvatar()" class="w-7 h-7 rounded-full overflow-hidden border border-gray-600 bg-slate-700 flex items-center justify-center cursor-pointer relative group" title="Сменить аватарку">
-                <img id="user-avatar" src="" class="w-full h-full object-cover hidden">
-                <i id="avatar-placeholder" class="fa-solid fa-user text-xs text-gray-300"></i>
-            </div>
-            <div class="relative cursor-pointer">
-                <i class="fa-solid fa-envelope text-lg"></i>
-                <span class="absolute -top-1.5 -right-1.5 bg-red-600 text-[9px] text-white font-bold w-4 h-4 rounded-full flex items-center justify-center">1</span>
-            </div>
-            <div class="relative cursor-pointer">
-                <i class="fa-solid fa-bell text-lg"></i>
-                <span class="absolute -top-1.5 -right-1.5 bg-red-600 text-[9px] text-white font-bold w-4 h-4 rounded-full flex items-center justify-center">1</span>
-            </div>
-            <i class="fa-solid fa-bolt text-lg cursor-pointer hover:text-amber-400"></i>
-            <i class="fa-solid fa-magnifying-glass text-lg cursor-pointer"></i>
-        </div>
-    </header>
-
-    <!-- ИНФО О СЕРВЕРЕ -->
-    <div class="p-4 bg-[#0d0e12] shrink-0">
-        <div class="arizona-card p-4">
-            <div class="text-lg font-bold text-gray-100 flex items-center gap-1.5 mb-3">
-                Arizona Mobile 3 <span class="text-base">🌸</span>
-            </div>
-            <div class="flex justify-between items-center gap-2">
-                <button class="flex-1 bg-[#11131a] border border-[#222735] rounded-xl py-2.5 px-4 text-xs font-semibold text-gray-300 flex items-center gap-2">
-                    <i class="fa-solid fa-chevron-left text-[10px] text-gray-500"></i> Сервера Arizona Online
-                </button>
-                <button id="logout-btn" onclick="logout()" class="hidden bg-[#11131a] border border-[#222735] rounded-xl p-2.5 text-xs text-red-400 cursor-pointer" title="Выйти">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                </button>
-            </div>
-            <div id="user-badge" class="mt-3 text-xs text-gray-400 hidden">
-                Вы вошли как: <span id="badge-name" class="font-bold"></span>
-            </div>
-        </div>
+    <div class="absolute inset-0 z-0 opacity-10 pointer-events-none">
+        <img src="https://i.imgur.com/h96sSjG.jpg" class="w-full h-full object-cover" alt="LSPD Background">
     </div>
 
-    <!-- СПИСОК КАНАЛОВ -->
-    <div id="forum-view" class="flex-1 overflow-y-auto px-4 pb-6 space-y-3"></div>
+    <div class="relative z-10 flex flex-col h-full overflow-hidden">
+        
+        <header class="lspd-header px-4 py-4 flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-shield-halved text-xl text-blue-500 animate-pulse"></i>
+                <div class="text-sm font-bold tracking-wider text-blue-100 uppercase">LSPD | Мл. Сержант</div>
+            </div>
+            <div class="flex items-center gap-4 text-slate-300">
+                <div onclick="changeAvatar()" class="w-8 h-8 rounded-full overflow-hidden border-2 border-blue-500 bg-slate-800 flex items-center justify-center cursor-pointer relative" title="Сменить аватарку">
+                    <img id="user-avatar" src="" class="w-full h-full object-cover hidden">
+                    <i id="avatar-placeholder" class="fa-solid fa-user-shield text-sm text-blue-400"></i>
+                </div>
+                <div class="relative cursor-pointer">
+                    <i class="fa-solid fa-bell text-lg hover:text-blue-400 transition-colors"></i>
+                    <span class="absolute -top-1 -right-1 bg-blue-600 text-[8px] text-white font-bold w-3.5 h-3.5 rounded-full flex items-center justify-center">1</span>
+                </div>
+                <i class="fa-solid fa-right-from-bracket text-lg text-slate-400 hover:text-red-400 cursor-pointer hidden" id="logout-btn" onclick="logout()"></i>
+            </div>
+        </header>
 
-    <!-- СТРАНИЦА ВНУТРИ КАНАЛА -->
-    <div id="channel-view" class="flex-1 flex flex-col bg-[#0d0e12] hidden overflow-hidden">
-        <div class="p-3 arizona-header flex items-center gap-3 shrink-0">
-            <button onclick="backToForum()" class="text-gray-400 hover:text-white px-2 py-1 cursor-pointer">
-                <i class="fa-solid fa-arrow-left"></i>
+        <div class="p-4 shrink-0">
+            <div class="lspd-card p-4 flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-base font-bold text-white flex items-center gap-1.5 tracking-wide">
+                            LOS SANTOS POLICE DEPT.
+                        </h1>
+                        <p class="text-[11px] text-blue-400 font-medium">Официальный Бортовой Портал</p>
+                    </div>
+                    <span class="bg-blue-500/10 text-blue-400 border border-blue-500/30 text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-tight">Mobile 3 🌸</span>
+                </div>
+                
+                <div id="user-badge" class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 text-xs hidden">
+                    <div class="text-slate-400">Активный токен офицера:</div>
+                    <div id="badge-name" class="font-bold text-sm mt-0.5"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="forum-view" class="flex-1 overflow-y-auto px-4 pb-6 space-y-3"></div>
+
+        <div id="channel-view" class="flex-1 flex flex-col bg-[#060814] hidden overflow-hidden">
+            <div class="p-3 bg-slate-900 border-b border-blue-900/40 flex items-center gap-3 shrink-0">
+                <button onclick="backToForum()" class="text-slate-400 hover:text-white px-2 py-1 cursor-pointer">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <div>
+                    <h2 id="channel-title" class="font-bold text-xs text-white uppercase tracking-wide"></h2>
+                    <p id="channel-desc" class="text-[10px] text-blue-400"></p>
+                </div>
+            </div>
+            <div id="channel-body" class="flex-1 p-4 overflow-y-auto space-y-3 flex flex-col"></div>
+            <div id="chat-input-zone" class="p-3 bg-slate-900 border-t border-blue-900/40 shrink-0 hidden">
+                <div class="flex gap-2">
+                    <input id="chat-input" type="text" placeholder="Введите текст рапорта/ответа..." class="flex-1 lspd-input rounded-xl px-4 py-3 text-xs text-slate-200">
+                    <button onclick="sendMessage()" class="bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-5 text-xs font-bold cursor-pointer transition-colors">Отправить</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="admin-trigger" class="p-4 bg-[#060814] border-t border-blue-950 shrink-0 hidden">
+            <button onclick="openAdminMenu()" class="w-full bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/30 py-3 rounded-xl text-xs font-bold tracking-wider uppercase cursor-pointer transition-all">
+                <i class="fa-solid fa-sliders mr-1.5"></i> Изменить звания персонала
             </button>
-            <div>
-                <h2 id="channel-title" class="font-bold text-sm text-gray-100"></h2>
-                <p id="channel-desc" class="text-[10px] text-gray-500"></p>
-            </div>
         </div>
-        <div id="channel-body" class="flex-1 p-4 overflow-y-auto space-y-3 flex flex-col"></div>
-        <div id="chat-input-zone" class="p-3 bg-[#161920] border-t border-[#222735] shrink-0 hidden">
-            <form id="chat-form" class="flex gap-2">
-                <input id="chat-input" type="text" placeholder="Написать ответ..." class="flex-1 arizona-input rounded-xl px-4 py-2.5 text-xs text-gray-200">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 text-xs font-semibold">Отправить</button>
-            </form>
-        </div>
+
     </div>
 
-    <!-- КНОПКА АДМИНКИ -->
-    <div id="admin-trigger" class="p-4 bg-[#0d0e12] border-t border-[#1d222f] shrink-0 hidden">
-        <button onclick="openAdminMenu()" class="w-full bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-900/50 py-2.5 rounded-xl text-xs font-semibold cursor-pointer">
-            Панель управления должностями
-        </button>
-    </div>
-
-    <!-- ОКНО ВХОДА И РЕГИСТРАЦИИ -->
-    <div id="login-modal" class="fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-50">
-        <div class="arizona-card p-6 w-full max-w-sm">
-            <div class="text-center mb-5">
-                <div class="text-xl font-black text-gray-100 tracking-wide uppercase">Вход на портал LSPD</div>
-                <p id="login-tip" class="text-xs text-gray-500 mt-1">Введите Nick_Name. Если вы впервые, аккаунт создастся автоматически.</p>
-            </div>
-                        <div class="space-y-4">
-                <div>
-                    <label class="block text-[11px] text-gray-400 font-medium mb-1">Ник-нейм на английском (Nick_Name)</label>
-                    <input id="login-nick" type="text" required placeholder="Ivan_Ivanov" class="w-full arizona-input rounded-xl p-3 text-xs text-gray-200">
+    <div id="login-modal" class="fixed inset-0 bg-[#020617]/95 flex items-center justify-center p-4 z-50">
+        <div class="lspd-card p-6 w-full max-w-sm border-2 border-blue-900/50">
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 bg-blue-600/10 border-2 border-blue-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fa-solid fa-lock-open text-xl text-blue-400"></i>
                 </div>
-                <div id="rank-field-block">
-                    <label class="block text-[11px] text-gray-400 font-medium mb-1">Ваша должность (Название и ранг)</label>
-                    <input id="login-rank" type="text" placeholder="Сержант [4]" class="w-full arizona-input rounded-xl p-3 text-xs text-gray-200">
+                <div class="text-lg font-bold text-white tracking-wider uppercase">Авторизация в КПК</div>
+                <p id="login-tip" class="text-[11px] text-slate-400 mt-1">Новые пользователи создают аккаунт автоматически.</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-[10px] text-blue-400 font-bold uppercase tracking-wide mb-1">Имя пользователя (Nick_Name)</label>
+                    <input id="login-nick" type="text" placeholder="Ivan_Ivanov" class="w-full lspd-input rounded-xl p-3.5 text-xs text-white">
                 </div>
                 <div>
-                    <label id="pass-label" class="block text-[11px] text-gray-400 font-medium mb-1">Пароль</label>
-                    <input id="login-pass" type="password" required placeholder="••••••••" class="w-full arizona-input rounded-xl p-3 text-xs text-gray-200">
+                    <label id="pass-label" class="block text-[10px] text-blue-400 font-bold uppercase tracking-wide mb-1">Личный Пароль доступа</label>
+                    <input id="login-pass" type="password" placeholder="••••••••" class="w-full lspd-input rounded-xl p-3.5 text-xs text-white">
                 </div>
-                <button onclick="handleLogin()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs cursor-pointer">Подтвердить</button>
+                <button onclick="handleLogin()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl text-xs tracking-widest uppercase cursor-pointer transition-all shadow-lg shadow-blue-600/20 mt-2">
+                    Подключиться к базе данных
+                </button>
             </div>
+        </div>
     </div>
 
-    <!-- МЕНЮ УПРАВЛЕНИЯ РОЛЯМИ -->
-    <div id="admin-modal" class="fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-50 hidden">
-        <div class="arizona-card p-5 w-full max-w-sm flex flex-col max-h-[80vh]">
-            <div class="flex justify-between items-center mb-4">
-                <div class="font-bold text-sm text-gray-200">Управление сотрудниками</div>
-                <button onclick="closeAdminMenu()" class="text-gray-500 text-lg">&times;</button>
+    <div id="admin-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden">
+        <div class="lspd-card p-5 w-full max-w-sm flex flex-col max-h-[80vh]">
+            <div class="flex justify-between items-center mb-4 border-b border-blue-950 pb-2">
+                <div class="font-bold text-xs text-blue-400 uppercase tracking-wider">Корректировка Ролей</div>
+                <button onclick="closeAdminMenu()" class="text-slate-400 hover:text-white text-xl">&times;</button>
             </div>
             <div id="admin-user-list" class="flex-1 overflow-y-auto space-y-2"></div>
         </div>
@@ -140,60 +166,56 @@
 
     <script>
         const ROLES = {
-            LEADER: { name: 'Лидер', class: 'role-leader' },
-            DEPUTY: { name: 'Заместитель', class: 'role-deputy' },
+            LEADER: { name: 'Шеф [10]', class: 'role-leader' },
+            DEPUTY: { name: 'Главный Комиссар [9]', class: 'role-deputy' },
             HIGH: { name: 'Старший Состав', class: 'role-high' },
-            OFFICER: { name: 'Сотрудник', class: 'role-officer' },
+            OFFICER: { name: 'Офицер', class: 'role-officer' },
             USER: { name: 'Пользователь', class: 'role-user' }
         };
 
         let users = JSON.parse(localStorage.getItem('lspd_forum_users')) || [
-            { nick: 'Moskvin_Bounce', rank: 'Шеф', role: 'LEADER', pass: null, avatar: '' },
-            { nick: 'Trevor_Mersor', rank: 'Главный Комиссар', role: 'DEPUTY', pass: 'Bu2MvZ96', avatar: '' }
+            { nick: 'Moskvin_Bounce', role: 'LEADER', pass: null, avatar: '' },
+            { nick: 'Trevor_Mersor', role: 'DEPUTY', pass: 'Bu2MvZ96', avatar: '' }
         ];
 
         let channels = [
-            { id: 'upgrade', title: 'Систему Повышения', type: 'info', access: 'info', iconBg: 'bg-red-600/20 text-red-500', preText: 'Официальные критерии для повышения...', author: 'Moskvin_Bounce', time: 'Сегодня' },
-            { id: 'swat', title: 'Информация и Устав S.W.A.T', type: 'info', access: 'info', iconBg: 'bg-gray-700/30 text-gray-400', preText: 'Положения спец. отряда', author: 'Trevor_Mersor', time: 'Вчера' },
-            { id: 'members', title: 'Список Сотрудников LSPD', type: 'info', access: 'info', iconBg: 'bg-gray-700/30 text-gray-400', preText: 'Реестр департамента полиции', author: 'Moskvin_Bounce', time: '30 Мар 2026' },
-            { id: 'bonuses', title: 'Информация о получении Премий', type: 'info', access: 'info', iconBg: 'bg-gray-700/30 text-gray-400', preText: 'Заявления на денежные поощрения', author: 'Trevor_Mersor', time: '2 дня назад' },
-            { id: 'praise', title: 'Система Похвалы', type: 'info', access: 'info', iconBg: 'bg-gray-700/30 text-gray-400', preText: 'Выдача похвалы за работу', author: 'Moskvin_Bounce', time: 'Вчера' },
-            { id: 'kurilka', title: 'Курилка | LSPD', type: 'chat', access: 'open', iconBg: 'bg-red-600/20 text-red-500', preText: 'Разговоры обо всем', author: 'Система', time: 'Только что', messages: [] },
-            { id: 'praise-requests', title: 'Заявления на получение Похвалы', type: 'chat', access: 'open', iconBg: 'bg-red-600/20 text-red-500', preText: 'Рапорты сотрудников', author: 'Система', time: '1 час назад', messages: [] },
-            { id: 'secret', title: 'Офис Шерифа [🔒 Закрытый]', type: 'chat', access: 'closed', allowed: ['LEADER', 'DEPUTY'], iconBg: 'bg-gray-700/50 text-red-400', preText: 'Кабинет руководства LSPD', author: 'Moskvin_Bounce', time: 'Секретно', messages: [] }
+            { id: 'upgrade', title: '📂 | Устав и система повышения', type: 'info', access: 'info', img: 'https://i.imgur.com/G3P2mO8.jpg', preText: 'Официальные критерии для продвижения по службе...', author: 'Moskvin_Bounce', time: 'Сегодня' },
+            { id: 'swat', title: '⚡ | Академия и устав S.W.A.T', type: 'info', access: 'info', img: 'https://i.imgur.com/vHWhGqV.jpg', preText: 'Положения и регламенты тактического отряда', author: 'Trevor_Mersor', time: 'Вчера' },
+            { id: 'bonuses', title: '💰 | Премиальный фонд департамента', type: 'info', access: 'info', img: 'https://i.imgur.com/6XzW79B.jpg', preText: 'Заявления на денежные выплаты за дежурства', author: 'Trevor_Mersor', time: '2 дня назад' },
+            { id: 'kurilka', title: '💬 | Общая волна общения (Курилка)', type: 'chat', access: 'open', img: 'https://i.imgur.com/Hbyz74Y.jpg', preText: 'Свободные переговоры сотрудников вне службы', author: 'Система', time: 'Только что', messages: [] },
+            { id: 'secret', title: '🔒 | Sheriff\'s Office (Секретный Архив)', type: 'chat', access: 'closed', allowed: ['LEADER', 'DEPUTY'], img: 'https://i.imgur.com/pZ6mD6c.jpg', preText: 'Кабинет Шефа и Высшего Руководства LSPD', author: 'Moskvin_Bounce', time: 'Секретно', messages: [] }
         ];
 
         let currentUser = null;
+        let activeChannelId = null;
 
-        // Отслеживание ввода никнейма
         document.getElementById('login-nick').addEventListener('input', (e) => {
             const nick = e.target.value.trim();
             const user = users.find(u => u.nick.toLowerCase() === nick.toLowerCase());
-            const rankBlock = document.getElementById('rank-field-block');
             const passLabel = document.getElementById('pass-label');
 
             if (user) {
-                rankBlock.classList.add('hidden');
                 if (user.nick === 'Moskvin_Bounce' && !user.pass) {
-                    passLabel.innerText = "Придумайте пароль для Лидера (Первый вход)";
+                    passLabel.innerText = "Создайте секретный пароль Шефа (Первый вход)";
+                    passLabel.style.color = "#3b82f6";
                 } else {
-                    passLabel.innerText = "Введите пароль";
+                    passLabel.innerText = "Личный Пароль доступа";
+                    passLabel.style.color = "#4b5563";
                 }
             } else {
-                rankBlock.classList.remove('hidden');
-                passLabel.innerText = "Придумайте пароль для регистрации";
+                passLabel.innerText = "Придумайте пароль для нового аккаунта";
+                passLabel.style.color = "#10b981";
             }
         });
 
-        // Функция обработки логина БЕЗ перезагрузки страницы
-        function handleLogin(event) {
-            event.preventDefault();
-            
+        function handleLogin() {
             const nick = document.getElementById('login-nick').value.trim();
-            const rank = document.getElementById('login-rank').value.trim();
             const pass = document.getElementById('login-pass').value;
 
-            if (!nick || !pass) return;
+            if (!nick || !pass) {
+                alert('Заполните данные для входа!');
+                return;
+            }
 
             let user = users.find(u => u.nick.toLowerCase() === nick.toLowerCase());
 
@@ -201,13 +223,13 @@
                 if (user.nick === 'Moskvin_Bounce' && !user.pass) {
                     user.pass = pass;
                     localStorage.setItem('lspd_forum_users', JSON.stringify(users));
-                    alert('Пароль лидера успешно установлен!');
+                    alert('Доступ лидера активирован! Пароль сохранен.');
                 } else if (user.pass !== pass) {
-                    alert('Неверный пароль!');
+                    alert('Ошибка! Неверный пароль доступа.');
                     return;
                 }
             } else {
-                user = { nick, rank: rank || 'Пользователь', role: 'USER', pass: pass, avatar: '' };
+                user = { nick, role: 'USER', pass: pass, avatar: '' };
                 users.push(user);
                 localStorage.setItem('lspd_forum_users', JSON.stringify(users));
             }
@@ -220,7 +242,7 @@
             updateAvatarUI();
 
             document.getElementById('badge-name').className = ROLES[currentUser.role].class;
-            document.getElementById('badge-name').innerText = `${currentUser.nick} [${currentUser.rank}]`;
+            document.getElementById('badge-name').innerText = `${currentUser.nick} (${ROLES[currentUser.role].name})`;
 
             if (currentUser.role === 'LEADER' || currentUser.role === 'DEPUTY') {
                 document.getElementById('admin-trigger').classList.remove('hidden');
@@ -231,7 +253,7 @@
 
         function changeAvatar() {
             if (!currentUser) return;
-            const url = prompt("Введите URL-ссылку на вашу новую аватарку:", currentUser.avatar || "");
+            const url = prompt("Введите прямую ссылку URL на картинку для аватарки:", currentUser.avatar || "");
             if (url !== null) {
                 currentUser.avatar = url.trim();
                 const idx = users.findIndex(u => u.nick === currentUser.nick);
@@ -261,20 +283,20 @@
             channels.forEach(ch => {
                 const isClosed = ch.access === 'closed';
                 const hasAccess = !isClosed || ch.allowed.includes(currentUser.role);
-                let lockIcon = isClosed ? ' <i class="fa-solid fa-lock text-[10px] text-red-500 ml-1"></i>' : '';
 
                 let lastTopicHTML = hasAccess 
-                    ? `<div class="text-[11px] text-gray-400 mt-1 truncate"><span class="bg-red-600/20 text-red-400 px-1 rounded text-[10px] mr-1 font-bold">Тема</span> ${ch.preText}</div>
-                       <div class="text-[10px] text-gray-500 mt-0.5">${ch.time} · <span class="text-gray-400">${ch.author}</span></div>`
-                    : `<div class="text-[11px] text-red-400/70 mt-1 italic">🔒 Раздел скрыт настройками приватности</div>`;
+                    ? `<div class="text-[11px] text-slate-400 mt-1 truncate"><span class="text-blue-400 font-bold">Детали:</span> ${ch.preText}</div>
+                       <div class="text-[10px] text-slate-500 mt-1">${ch.time} · Запустил: <span class="text-slate-400 font-medium">${ch.author}</span></div>`
+                    : `<div class="text-[11px] text-red-400/80 mt-1 font-medium"><i class="fa-solid fa-lock mr-1"></i> Доступ заблокирован (Только Руководство)</div>`;
 
                 container.insertAdjacentHTML('beforeend', `
-                    <div onclick="openChannel('${ch.id}')" class="arizona-card p-3.5 flex items-start gap-3.5 cursor-pointer hover:bg-[#1a1e29] transition-all">
-                        <div class="w-10 h-10 rounded-full ${ch.iconBg} flex items-center justify-center shrink-0 text-base">
-                            <i class="fa-regular fa-comments"></i>
+                    <div onclick="openChannel('${ch.id}')" class="lspd-card overflow-hidden cursor-pointer hover:border-blue-500/60 hover:scale-[1.01] transition-all duration-200">
+                        <div class="h-24 w-full bg-slate-900 relative">
+                            <img src="${ch.img}" class="w-full h-full object-cover opacity-65">
+                            <div class="absolute inset-0 bg-gradient-to-t modules from-[#0f172a] to-transparent"></div>
+                            <div class="absolute bottom-2 left-3 font-bold text-xs text-white uppercase tracking-wider drop-shadow-md">${ch.title}</div>
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="font-bold text-[13px] text-gray-100 flex items-center">${ch.title}${lockIcon}</h3>
+                        <div class="p-3">
                             ${lastTopicHTML}
                         </div>
                     </div>
@@ -285,17 +307,18 @@
         function openChannel(id) {
             const ch = channels.find(c => c.id === id);
             if (ch.access === 'closed' && !ch.allowed.includes(currentUser.role)) {
-                alert('У вас нет доступа к этой секретной теме!');
+                alert('Ошибка доступа! Данный канал зашифрован.');
                 return;
             }
 
+            activeChannelId = id;
             document.getElementById('forum-view').classList.add('hidden');
             document.getElementById('channel-view').classList.remove('hidden');
             document.getElementById('channel-title').innerText = ch.title;
             
-            let descText = 'Доступ: Все сотрудники фракции';
-            if (ch.access === 'info') descText = 'Доступ: Только чтение (Для руководства)';
-            if (ch.access === 'closed') descText = 'Доступ: Совершенно Секретно';
+            let descText = 'Доступ: Весь состав полиции';
+            if (ch.access === 'info') descText = 'Режим: Информационный архив (Только чтение)';
+            if (ch.access === 'closed') descText = 'Режим: Секретный архив руководства';
             document.getElementById('channel-desc').innerText = descText;
 
             renderChannelContent(ch);
@@ -311,27 +334,24 @@
 
             if (ch.type === 'info') {
                 body.innerHTML = `
-                    <div class="arizona-subcard p-5 text-center text-gray-500 text-xs italic my-auto">
-                        <i class="fa-solid fa-folder-open text-3xl text-gray-600 mb-3 block"></i>
-                        Раздел пока пуст. Заполняется Руководством.
+                    <div class="lspd-subcard p-4 text-slate-400 text-xs flex flex-col items-center justify-center py-12 text-center my-auto">
+                        <i class="fa-solid fa-folder-closed text-3xl text-blue-900 mb-2"></i>
+                        Информационный блок пуст.<br>Ожидайте публикации документов от руководства.
                     </div>
                 `;
             } else {
                 if (canWrite) inputZone.classList.remove('hidden');
                 if (!ch.messages || ch.messages.length === 0) {
-                    body.innerHTML = `<div class="text-center text-gray-600 text-xs my-auto italic">Ответов в теме пока нет.</div>`;
+                    body.innerHTML = `<div class="text-center text-slate-500 text-xs my-auto italic">Рапортов и ответов на линии не обнаружено.</div>`;
                 } else {
                     ch.messages.forEach(m => {
                         let userAvatarHTML = m.user.avatar 
-                            ? `<img src="${m.user.avatar}" class="w-6 h-6 rounded-full object-cover">`
-                            : `<div class="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-[10px] text-gray-300"><i class="fa-solid fa-user"></i></div>`;
+                            ? `<img src="${m.user.avatar}" class="w-7 h-7 rounded-full object-cover border border-blue-500">`
+                            : `<div class="w-7 h-7 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] text-blue-400"><i class="fa-solid fa-user-shield"></i></div>`;
 
                         body.insertAdjacentHTML('beforeend', `
-                            <div class="arizona-subcard p-3">
-                                <div class="flex justify-between items-center mb-2 border-b border-[#222735] pb-1.5">
+                            <div class="lspd-subcard p-3.5 bg-slate-900/90">
+                                <div class="flex justify-between items-center mb-2 border-b border-blue-950 pb-2">
                                     <div class="flex items-center gap-2">
                                         ${userAvatarHTML}
-                                        <span class="text-xs font-bold text-gray-200">${m.user.nick} <span class="text-[10px] font-normal text-gray-500">[${m.user.rank}]</span></span>
-                                    </div>
-                                    <span class="text-[10px] ${ROLES[m.user.role].class}">${ROLES[m.user.role].name}</span>
-  
+                                        <span class="text-xs font-bold text-slate-200">${m.user.nick}</s
