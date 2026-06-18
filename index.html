@@ -3,361 +3,336 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Los Santos Police Department | Portal</title>
+    <title>Arizona RP | Форум LSPD</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #15181f; color: #e2e8f0; }
-        .arizona-bg { background-color: #1e222b; }
-        .arizona-border { border-color: #2a2f3d; }
-        .arizona-input { background-color: #15181f; border: 1px solid #2a2f3d; }
-        .arizona-input:focus { border-color: #ff9900; outline: none; }
+        body { font-family: 'Inter', sans-serif; background-color: #0d0e12; color: #e2e8f0; }
+        .arizona-header { background-color: #161920; border-bottom: 1px solid #222735; }
+        .arizona-card { background-color: #151821; border: 1px solid #1d222f; border-radius: 16px; }
+        .arizona-subcard { background-color: #11131a; border: 1px solid #1c202b; border-radius: 14px; }
+        .arizona-input { background-color: #0d0e12; border: 1px solid #222735; }
+        .arizona-input:focus { border-color: #e53e3e; outline: none; }
         
-        /* Цвета ролей */
-        .role-leader { color: #4a154b; font-weight: bold; }
-        .role-deputy { color: #228b22; font-weight: bold; }
-        .role-high { color: #00008b; font-weight: bold; }
-        .role-officer { color: #ffd700; font-weight: bold; }
-        .role-user { color: #a9a9a9; }
+        .role-leader { color: #5B21B6; font-weight: 700; text-shadow: 0 0 5px rgba(91,33,182,0.3); }
+        .role-deputy { color: #15803D; font-weight: 700; text-shadow: 0 0 5px rgba(21,128,61,0.3); }
+        .role-high { color: #1E3A8A; font-weight: 600; }
+        .role-officer { color: #D97706; font-weight: 600; }
+        .role-user { color: #4B5563; font-weight: 500; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0d0e12; }
+        ::-webkit-scrollbar-thumb { background: #222735; border-radius: 10px; }
     </style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden">
+<body class="h-screen flex flex-col overflow-hidden max-w-md mx-auto border-x border-[#1d222f] shadow-2xl">
 
-    <header class="arizona-bg border-b arizona-border px-6 py-4 flex justify-between items-center shrink-0">
-        <div class="flex items-center gap-3">
-            <div class="bg-amber-500 text-slate-900 font-bold p-2 rounded">LSPD</div>
-            <h1 class="text-xl font-bold tracking-wide text-gray-100">Los Santos Police Department</h1>
+    <!-- HEADER -->
+    <header class="arizona-header px-4 py-3 flex justify-between items-center shrink-0">
+        <div class="flex items-center gap-4">
+            <i class="fa-solid fa-bars text-xl text-gray-400 cursor-pointer"></i>
+            <div class="flex items-center justify-center w-8 h-8 rounded-lg font-black text-xl italic tracking-tighter" style="background: linear-gradient(135deg, #e11d48, #2563eb); color: #fff;">A</div>
         </div>
-        <div id="auth-status" class="text-sm flex items-center gap-4">
+        <div class="flex items-center gap-5 text-gray-400">
+            <!-- Кликабельная Аватарка -->
+            <div onclick="changeAvatar()" class="w-7 h-7 rounded-full overflow-hidden border border-gray-600 bg-slate-700 flex items-center justify-center cursor-pointer relative group" title="Сменить аватарку">
+                <img id="user-avatar" src="" class="w-full h-full object-cover hidden">
+                <i id="avatar-placeholder" class="fa-solid fa-user text-xs text-gray-300"></i>
             </div>
+            <div class="relative cursor-pointer">
+                <i class="fa-solid fa-envelope text-lg"></i>
+                <span class="absolute -top-1.5 -right-1.5 bg-red-600 text-[9px] text-white font-bold w-4 h-4 rounded-full flex items-center justify-center">1</span>
+            </div>
+            <div class="relative cursor-pointer">
+                <i class="fa-solid fa-bell text-lg"></i>
+                <span class="absolute -top-1.5 -right-1.5 bg-red-600 text-[9px] text-white font-bold w-4 h-4 rounded-full flex items-center justify-center">1</span>
+            </div>
+            <i class="fa-solid fa-bolt text-lg cursor-pointer hover:text-amber-400"></i>
+            <i class="fa-solid fa-magnifying-glass text-lg cursor-pointer"></i>
+        </div>
     </header>
 
-    <div class="flex flex-1 overflow-hidden">
-        
-        <aside class="w-80 arizona-bg border-r arizona-border flex flex-col p-4 justify-between shrink-0">
-            <div>
-                <div class="mb-6">
-                    <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Информационные каналы</span>
-                    <div id="info-channels" class="mt-2 space-y-1">
-                        </div>
-                </div>
-                <div>
-                    <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Рабочие & Текстовые</span>
-                    <div id="chat-channels" class="mt-2 space-y-1">
-                        </div>
-                </div>
+    <!-- ИНФО О СЕРВЕРЕ -->
+    <div class="p-4 bg-[#0d0e12] shrink-0">
+        <div class="arizona-card p-4">
+            <div class="text-lg font-bold text-gray-100 flex items-center gap-1.5 mb-3">
+                Arizona Mobile 3 <span class="text-base">🌸</span>
             </div>
-            
-            <div id="admin-panel-btn" class="hidden">
-                <button onclick="toggleAdminModal(true)" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-medium py-2 px-4 rounded text-sm transition-all cursor-pointer">
-                    Управление пользователями
+            <div class="flex justify-between items-center gap-2">
+                <button class="flex-1 bg-[#11131a] border border-[#222735] rounded-xl py-2.5 px-4 text-xs font-semibold text-gray-300 flex items-center gap-2">
+                    <i class="fa-solid fa-chevron-left text-[10px] text-gray-500"></i> Сервера Arizona Online
+                </button>
+                <button id="logout-btn" onclick="logout()" class="hidden bg-[#11131a] border border-[#222735] rounded-xl p-2.5 text-xs text-red-400 cursor-pointer" title="Выйти">
+                    <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
             </div>
-        </aside>
-
-        <main class="flex-1 flex flex-col bg-[#111317]">
-            <div class="p-4 arizona-bg border-b arizona-border flex justify-between items-center">
-                <h2 id="current-channel-title" class="text-lg font-semibold text-amber-500">Выберите канал</h2>
-                <span id="current-channel-type" class="text-xs px-2 py-1 bg-slate-800 rounded text-gray-400"></span>
+            <div id="user-badge" class="mt-3 text-xs text-gray-400 hidden">
+                Вы вошли как: <span id="badge-name" class="font-bold"></span>
             </div>
-
-            <div id="channel-content-area" class="flex-1 p-6 overflow-y-auto flex flex-col justify-between">
-                <div id="messages-container" class="space-y-4 hidden">
-                    </div>
-                <div id="info-text-container" class="text-gray-400 italic text-center my-auto hidden">
-                    [Здесь будет находиться официальная информация. Заполняется Лидером/Заместителем]
-                </div>
-                <div id="no-access-container" class="text-red-400 text-center my-auto hidden">
-                    🔒 У вас нет доступа к просмотру или отправке сообщений в этот закрытый канал.
-                </div>
-
-                <div id="message-input-container" class="mt-4 hidden">
-                    <form id="message-form" class="flex gap-2">
-                        <input id="message-input" type="text" placeholder="Введите сообщение..." class="flex-1 arizona-input rounded px-4 py-3 text-sm text-gray-200">
-                        <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-6 py-2 rounded text-sm transition-all cursor-pointer">Отправить</button>
-                    </form>
-                </div>
-            </div>
-        </main>
+        </div>
     </div>
 
-    <div id="auth-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-        <div class="arizona-bg border arizona-border p-8 rounded-lg w-full max-w-md shadow-2xl">
-            <div class="text-center mb-6">
-                <div class="text-amber-500 font-bold text-3xl mb-1">ARIZONA LSPD</div>
-                <p class="text-gray-400 text-sm">Авторизация сотрудника министерства юстиции</p>
+    <!-- СПИСОК КАНАЛОВ -->
+    <div id="forum-view" class="flex-1 overflow-y-auto px-4 pb-6 space-y-3"></div>
+
+    <!-- СТРАНИЦА ВНУТРИ КАНАЛА -->
+    <div id="channel-view" class="flex-1 flex flex-col bg-[#0d0e12] hidden overflow-hidden">
+        <div class="p-3 arizona-header flex items-center gap-3 shrink-0">
+            <button onclick="backToForum()" class="text-gray-400 hover:text-white px-2 py-1 cursor-pointer">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div>
+                <h2 id="channel-title" class="font-bold text-sm text-gray-100"></h2>
+                <p id="channel-desc" class="text-[10px] text-gray-500"></p>
             </div>
-            <form id="auth-form" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Ваш ник на англ. (Nick_Name)</label>
-                    <input id="auth-nick" type="text" required placeholder="Ivan_Ivanov" class="w-full arizona-input rounded p-3 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Ваша должность (Название и цифра)</label>
-                    <input id="auth-rank" type="text" required placeholder="Sheriff [10]" class="w-full arizona-input rounded p-3 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Ваш пароль</label>
-                    <input id="auth-password" type="password" required placeholder="••••••••" class="w-full arizona-input rounded p-3 text-sm">
-                </div>
-                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-3 rounded text-sm transition-all cursor-pointer">Войти / Зарегистрироваться</button>
+        </div>
+        <div id="channel-body" class="flex-1 p-4 overflow-y-auto space-y-3 flex flex-col"></div>
+        <div id="chat-input-zone" class="p-3 bg-[#161920] border-t border-[#222735] shrink-0 hidden">
+            <form id="chat-form" class="flex gap-2">
+                <input id="chat-input" type="text" placeholder="Написать ответ..." class="flex-1 arizona-input rounded-xl px-4 py-2.5 text-xs text-gray-200">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-4 text-xs font-semibold">Отправить</button>
             </form>
         </div>
     </div>
 
-    <div id="admin-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
-        <div class="arizona-bg border arizona-border p-6 rounded-lg w-full max-w-2xl max-h-[80vh] flex flex-col">
+    <!-- КНОПКА АДМИНКИ -->
+    <div id="admin-trigger" class="p-4 bg-[#0d0e12] border-t border-[#1d222f] shrink-0 hidden">
+        <button onclick="openAdminMenu()" class="w-full bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-900/50 py-2.5 rounded-xl text-xs font-semibold cursor-pointer">
+            Панель управления должностями
+        </button>
+    </div>
+
+    <!-- ОКНО ВХОДА И РЕГИСТРАЦИИ -->
+    <div id="login-modal" class="fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-50">
+        <div class="arizona-card p-6 w-full max-w-sm">
+            <div class="text-center mb-5">
+                <div class="text-xl font-black text-gray-100 tracking-wide uppercase">Вход на портал LSPD</div>
+                <p id="login-tip" class="text-xs text-gray-500 mt-1">Введите Nick_Name. Если вы впервые, аккаунт создастся автоматически.</p>
+            </div>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-[11px] text-gray-400 font-medium mb-1">Ник-нейм на английском (Nick_Name)</label>
+                    <input id="login-nick" type="text" required placeholder="Ivan_Ivanov" class="w-full arizona-input rounded-xl p-3 text-xs text-gray-200">
+                </div>
+                <div id="rank-field-block">
+                    <label class="block text-[11px] text-gray-400 font-medium mb-1">Ваша должность (Название и ранг)</label>
+                    <input id="login-rank" type="text" placeholder="Сержант [4]" class="w-full arizona-input rounded-xl p-3 text-xs text-gray-200">
+                </div>
+                <div>
+                    <label id="pass-label" class="block text-[11px] text-gray-400 font-medium mb-1">Пароль</label>
+                    <input id="login-pass" type="password" required placeholder="••••••••" class="w-full arizona-input rounded-xl p-3 text-xs text-gray-200">
+                </div>
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl text-xs">Подтвердить</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- МЕНЮ УПРАВЛЕНИЯ РОЛЯМИ -->
+    <div id="admin-modal" class="fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-50 hidden">
+        <div class="arizona-card p-5 w-full max-w-sm flex flex-col max-h-[80vh]">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-amber-500">Управление пользователями & Ролями</h3>
-                <button onclick="toggleAdminModal(false)" class="text-gray-400 hover:text-white text-xl cursor-pointer">&times;</button>
+                <div class="font-bold text-sm text-gray-200">Управление сотрудниками</div>
+                <button onclick="closeAdminMenu()" class="text-gray-500 text-lg">&times;</button>
             </div>
-            <div class="overflow-y-auto flex-1">
-                <table class="w-full text-left text-sm text-gray-300">
-                    <thead class="bg-slate-800 text-xs text-gray-400 uppercase">
-                        <tr>
-                            <th class="p-3">Сотрудник</th>
-                            <th class="p-3">Должность</th>
-                            <th class="p-3">Текущая роль</th>
-                            <th class="p-3 text-right">Действие</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-users-list">
-                        </tbody>
-                </table>
-            </div>
+            <div id="admin-user-list" class="flex-1 overflow-y-auto space-y-2"></div>
         </div>
     </div>
 
     <script>
-        // Изначальная база данных (сохраняется в памяти сессии браузера)
         const ROLES = {
-            LEADER: { name: 'Лидер', class: 'role-leader', level: 5 },
-            DEPUTY: { name: 'Заместитель', class: 'role-deputy', level: 4 },
-            HIGH: { name: 'Старший Состав', class: 'role-high', level: 3 },
-            OFFICER: { name: 'Сотрудник', class: 'role-officer', level: 2 },
-            USER: { name: 'Пользователь', class: 'role-user', level: 1 }
+            LEADER: { name: 'Лидер', class: 'role-leader' },
+            DEPUTY: { name: 'Заместитель', class: 'role-deputy' },
+            HIGH: { name: 'Старший Состав', class: 'role-high' },
+            OFFICER: { name: 'Сотрудник', class: 'role-officer' },
+            USER: { name: 'Пользователь', class: 'role-user' }
         };
 
+        // Загрузка или создание базы данных с вашими условиями
+        let users = JSON.parse(localStorage.getItem('lspd_forum_users')) || [
+            { nick: 'Moskvin_Bounce', rank: 'Шеф', role: 'LEADER', pass: null, avatar: '' },
+            { nick: 'Trevor_Mersor', rank: 'Главный Комиссар', role: 'DEPUTY', pass: 'Bu2MvZ96', avatar: '' }
+        ];
+
         let channels = [
-            { id: 'sys-up', title: 'Система Повышения', type: 'info', access: 'info' },
-            { id: 'swat', title: 'Информация и Устав S.W.A.T', type: 'info', access: 'info' },
-            { id: 'staff', title: 'Список Сотрудников LSPD', type: 'info', access: 'info' },
-            { id: 'awards', title: 'Информация о получении Премий', type: 'info', access: 'info' },
-            { id: 'praise-sys', title: 'Система Похвалы', type: 'info', access: 'info' },
-            { id: 'kurilka', title: 'Курилка | LSPD', type: 'chat', access: 'open', messages: [] },
-            { id: 'praise-claims', title: 'Заявления на получение Похвалы', type: 'chat', access: 'open', messages: [] },
-            { id: 'discussions', title: 'Секретная Штаб-квартира', type: 'chat', access: 'closed', allowedRoles: ['LEADER', 'DEPUTY'], messages: [] }
+            { id: 'upgrade', title: 'Систему Повышения', type: 'info', access: 'info', iconBg: 'bg-red-600/20 text-red-500', preText: 'Официальные критерии для повышения...', author: 'Moskvin_Bounce', time: 'Сегодня' },
+            { id: 'swat', title: 'Информация и Устав S.W.A.T', type: 'info', access: 'info', iconBg: 'bg-gray-700/30 text-gray-400', preText: 'Положения спец. отряда', author: 'Trevor_Mersor', time: 'Вчера' },
+            { id: 'members', title: 'Список Сотрудников LSPD', type: 'info', access: 'info', iconBg: 'bg-gray-700/30 text-gray-400', preText: 'Реестр департамента полиции', author: 'Moskvin_Bounce', time: '30 Мар 2026' },
+            { id: 'bonuses', title: 'Информация о получении Премий', type: 'info', access: 'info', iconBg: 'bg-gray-700/30 text-gray-400', preText: 'Заявления на денежные поощрения', author: 'Trevor_Mersor', time: '2 дня назад' },
+            { id: 'praise', title: 'Система Похвалы', type: 'info', access: 'info', iconBg: 'bg-gray-700/30 text-gray-400', preText: 'Выдача похвалы за работу', author: 'Moskvin_Bounce', time: 'Вчера' },
+            { id: 'kurilka', title: 'Курилка | LSPD', type: 'chat', access: 'open', iconBg: 'bg-red-600/20 text-red-500', preText: 'Разговоры обо всем', author: 'Система', time: 'Только что', messages: [] },
+            { id: 'praise-requests', title: 'Заявления на получение Похвалы', type: 'chat', access: 'open', iconBg: 'bg-red-600/20 text-red-500', preText: 'Рапорты сотрудников', author: 'Система', time: '1 час назад', messages: [] },
+            { id: 'secret', title: 'Офис Шерифа [🔒 Закрытый]', type: 'chat', access: 'closed', allowed: ['LEADER', 'DEPUTY'], iconBg: 'bg-gray-700/50 text-red-400', preText: 'Кабинет руководства LSPD', author: 'Moskvin_Bounce', time: 'Секретно', messages: [] }
         ];
 
-        let users = JSON.parse(localStorage.getItem('lspd_users')) || [
-            { nick: 'Neo_Blow', rank: 'Sheriff [10]', role: 'LEADER' }
-        ];
-        
         let currentUser = null;
-        let currentChannel = null;
 
-        // Элементы DOM
-        const authModal = document.getElementById('auth-modal');
-        const authForm = document.getElementById('auth-form');
-        const authStatus = document.getElementById('auth-status');
-        const adminPanelBtn = document.getElementById('admin-panel-btn');
-        const infoChannelsContainer = document.getElementById('info-channels');
-        const chatChannelsContainer = document.getElementById('chat-channels');
+        // Следим за вводом никнейма, чтобы адаптировать форму
+        document.getElementById('login-nick').addEventListener('input', (e) => {
+            const nick = e.target.value.trim();
+            const user = users.find(u => u.nick.toLowerCase() === nick.toLowerCase());
+            const rankBlock = document.getElementById('rank-field-block');
+            const passLabel = document.getElementById('pass-label');
 
-        // Инициализация авторизации
-        authForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const nick = document.getElementById('auth-nick').value.trim();
-            const rank = document.getElementById('auth-rank').value.trim();
-            
-            let user = users.find(u => u.nick.toLowerCase() === nick.toLowerCase());
-            if (!user) {
-                // Если юзера нет, создаем нового с дефолтной ролью "Пользователь"
-                user = { nick, rank, role: 'USER' };
-                users.push(user);
-                localStorage.setItem('lspd_users', JSON.stringify(users));
+            if (user) {
+                rankBlock.classList.add('hidden'); // Должность системных менять нельзя
+                if (user.nick === 'Moskvin_Bounce' && !user.pass) {
+                    passLabel.innerText = "Придумайте пароль для Лидера (Первый вход)";
+                } else {
+                    passLabel.innerText = "Введите пароль";
+                }
+            } else {
+                rankBlock.classList.remove('hidden');
+                passLabel.innerText = "Придумайте пароль для регистрации";
             }
-            
-            currentUser = user;
-            authModal.classList.add('hidden');
-            setupUI();
         });
 
-        function setupUI() {
-            // Отображение статуса
-            authStatus.innerHTML = `
-                <div class="text-right">
-                    <div class="font-semibold text-gray-200">${currentUser.nick}</div>
-                    <div class="text-xs text-gray-400">${currentUser.rank} • <span class="${ROLES[currentUser.role].class}">${ROLES[currentUser.role].name}</span></div>
-                </div>
-                <button onclick="logout()" class="text-xs text-red-400 hover:underline cursor-pointer">Выйти</button>
-            `;
+        // Вход и регистрация
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nick = document.getElementById('login-nick').value.trim();
+            const rank = document.getElementById('login-rank').value.trim();
+            const pass = document.getElementById('login-pass').value;
 
-            // Показ админ-кнопки для Лидера и Зама
-            if (currentUser.role === 'LEADER' || currentUser.role === 'DEPUTY') {
-                adminPanelBtn.classList.remove('hidden');
+            let user = users.find(u => u.nick.toLowerCase() === nick.toLowerCase());
+
+            if (user) {
+                // Если Москвин заходит впервые, сохраняем его новый пароль
+                if (user.nick === 'Moskvin_Bounce' && !user.pass) {
+                    user.pass = pass;
+                    localStorage.setItem('lspd_forum_users', JSON.stringify(users));
+                    alert('Пароль лидера успешно установлен!');
+                } else if (user.pass !== pass) {
+                    alert('Неверный пароль!');
+                    return;
+                }
             } else {
-                adminPanelBtn.classList.add('hidden');
+                // Создание обычного пользователя (Авто-роль USER)
+                user = { nick, rank: rank || 'Гражданский', role: 'USER', pass: pass, avatar: '' };
+                users.push(user);
+                localStorage.setItem('lspd_forum_users', JSON.stringify(users));
             }
 
-            renderChannels();
-            selectChannel(channels[0].id);
+            currentUser = user;
+            document.getElementById('login-modal').classList.add('hidden');
+            document.getElementById('logout-btn').classList.remove('hidden');
+            document.getElementById('user-badge').classList.remove('hidden');
+            
+            updateAvatarUI();
+
+            document.getElementById('badge-name').className = ROLES[currentUser.role].class;
+            document.getElementById('badge-name').innerText = `${currentUser.nick} [${currentUser.rank}]`;
+
+            if (currentUser.role === 'LEADER' || currentUser.role === 'DEPUTY') {
+                document.getElementById('admin-trigger').classList.remove('hidden');
+            }
+
+            renderForum();
+        });
+
+        // Изменение аватарки
+        function changeAvatar() {
+            if (!currentUser) return;
+            const url = prompt("Введите URL-ссылку на вашу новую аватарку (из интернета):", currentUser.avatar || "");
+            if (url !== null) {
+                currentUser.avatar = url.trim();
+                // Синхронизируем изменения в общем массиве пользователей
+                const idx = users.findIndex(u => u.nick === currentUser.nick);
+                if (idx !== -1) users[idx].avatar = currentUser.avatar;
+                localStorage.setItem('lspd_forum_users', JSON.stringify(users));
+                updateAvatarUI();
+            }
         }
 
-        function renderChannels() {
-            infoChannelsContainer.innerHTML = '';
-            chatChannelsContainer.innerHTML = '';
+        function updateAvatarUI() {
+            const img = document.getElementById('user-avatar');
+            const placeholder = document.getElementById('avatar-placeholder');
+            if (currentUser && currentUser.avatar) {
+                img.src = currentUser.avatar;
+                img.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+            } else {
+                img.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+            }
+        }
+
+        // Рендер тем/каналов
+        function renderForum() {
+            const container = document.getElementById('forum-view');
+            container.innerHTML = '';
 
             channels.forEach(ch => {
-                const isSelected = currentChannel && currentChannel.id === ch.id;
-                const activeClass = isSelected ? 'bg-amber-500/10 text-amber-500 font-medium' : 'text-gray-400 hover:bg-slate-800/50 hover:text-gray-200';
-                const icon = ch.access === 'closed' ? '🔒' : (ch.type === 'info' ? '📢' : '💬');
-                
-                const html = `
-                    <button onclick="selectChannel('${ch.id}')" class="w-full text-left px-3 py-2 rounded text-sm flex items-center gap-2 transition-all cursor-pointer ${activeClass}">
-                        <span>${icon}</span>
-                        <span class="truncate">${ch.title}</span>
-                    </button>
-                `;
+                const isClosed = ch.access === 'closed';
+                const hasAccess = !isClosed || ch.allowed.includes(currentUser.role);
+                let lockIcon = isClosed ? ' <i class="fa-solid fa-lock text-[10px] text-red-500 ml-1"></i>' : '';
 
-                if (ch.type === 'info') {
-                    infoChannelsContainer.insertAdjacentHTML('beforeend', html);
-                } else {
-                    chatChannelsContainer.insertAdjacentHTML('beforeend', html);
-                }
-            });
-        }
+                let lastTopicHTML = hasAccess 
+                    ? `<div class="text-[11px] text-gray-400 mt-1 truncate"><span class="bg-red-600/20 text-red-400 px-1 rounded text-[10px] mr-1 font-bold">Тема</span> ${ch.preText}</div>
+                       <div class="text-[10px] text-gray-500 mt-0.5">${ch.time} · <span class="text-gray-400">${ch.author}</span></div>`
+                    : `<div class="text-[11px] text-red-400/70 mt-1 italic">🔒 Раздел скрыт настройками приватности</div>`;
 
-        function selectChannel(id) {
-            currentChannel = channels.find(ch => ch.id === id);
-            renderChannels();
-
-            document.getElementById('current-channel-title').innerText = currentChannel.title;
-            
-            let typeText = 'Открытый доступ';
-            if (currentChannel.access === 'info') typeText = 'Информационный канал (Только чтение)';
-            if (currentChannel.access === 'closed') typeText = 'Закрытый канал';
-            document.getElementById('current-channel-type').innerText = typeText;
-
-            // Проверка прав доступа
-            const hasViewAccess = currentChannel.access !== 'closed' || currentChannel.allowedRoles.includes(currentUser.role);
-            const canWrite = currentChannel.access === 'open' || (currentChannel.access === 'info' && (currentUser.role === 'LEADER' || currentUser.role === 'DEPUTY')) || (currentChannel.access === 'closed' && currentChannel.allowedRoles.includes(currentUser.role));
-
-            // Сброс видимости элементов
-            document.getElementById('messages-container').classList.add('hidden');
-            document.getElementById('info-text-container').classList.add('hidden');
-            document.getElementById('no-access-container').classList.add('hidden');
-            document.getElementById('message-input-container').classList.add('hidden');
-
-            if (!hasViewAccess) {
-                document.getElementById('no-access-container').classList.remove('hidden');
-                return;
-            }
-
-            if (currentChannel.type === 'info') {
-                document.getElementById('info-text-container').classList.remove('hidden');
-            } else {
-                document.getElementById('messages-container').classList.remove('hidden');
-                renderMessages();
-            }
-
-            if (canWrite) {
-                document.getElementById('message-input-container').classList.remove('hidden');
-            }
-        }
-
-        function renderMessages() {
-            const container = document.getElementById('messages-container');
-            container.innerHTML = '';
-            
-            if (!currentChannel.messages || currentChannel.messages.length === 0) {
-                container.innerHTML = `<div class="text-gray-500 text-sm italic text-center py-4">Здесь еще нет сообщений. Начните общение первым!</div>`;
-                return;
-            }
-
-            currentChannel.messages.forEach(msg => {
                 container.insertAdjacentHTML('beforeend', `
-                    <div class="arizona-bg p-4 rounded border border-slate-800/60 max-w-3xl">
-                        <div class="flex items-center justify-between mb-1">
-                            <span class="font-medium text-sm text-gray-200">${msg.user.nick} <span class="text-xs font-normal text-gray-500">[${msg.user.rank}]</span></span>
-                            <span class="text-xs ${ROLES[msg.user.role].class}">${ROLES[msg.user.role].name}</span>
+                    <div onclick="openChannel('${ch.id}')" class="arizona-card p-3.5 flex items-start gap-3.5 cursor-pointer hover:bg-[#1a1e29] transition-all">
+                        <div class="w-10 h-10 rounded-full ${ch.iconBg} flex items-center justify-center shrink-0 text-base">
+                            <i class="fa-regular fa-comments"></i>
                         </div>
-                        <p class="text-sm text-gray-300">${msg.text}</p>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-bold text-[13px] text-gray-100 flex items-center">${ch.title}${lockIcon}</h3>
+                            ${lastTopicHTML}
+                        </div>
                     </div>
                 `);
             });
-            container.scrollTop = container.scrollHeight;
         }
 
-        // Отправка сообщений
-        document.getElementById('message-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const input = document.getElementById('message-input');
-            const text = input.value.trim();
-            if (!text) return;
-
-            currentChannel.messages.push({
-                user: { nick: currentUser.nick, rank: currentUser.rank, role: currentUser.role },
-                text: text
-            });
-
-            input.value = '';
-            renderMessages();
-        });
-
-        // Модалка Админ-панели
-        function toggleAdminModal(show) {
-            const modal = document.getElementById('admin-modal');
-            if (show) {
-                modal.classList.remove('hidden');
-                renderAdminUsers();
-            } else {
-                modal.classList.add('hidden');
+        function openChannel(id) {
+            const ch = channels.find(c => c.id === id);
+            if (ch.access === 'closed' && !ch.allowed.includes(currentUser.role)) {
+                alert('У вас нет доступа к этой секретной теме!');
+                return;
             }
+
+            document.getElementById('forum-view').classList.add('hidden');
+            document.getElementById('channel-view').classList.remove('hidden');
+            document.getElementById('channel-title').innerText = ch.title;
+            
+            let descText = 'Доступ: Все сотрудники фракции';
+            if (ch.access === 'info') descText = 'Доступ: Только чтение (Для руководства)';
+            if (ch.access === 'closed') descText = 'Доступ: Совершенно Секретно';
+            document.getElementById('channel-desc').innerText = descText;
+
+            renderChannelContent(ch);
         }
 
-        function renderAdminUsers() {
-            const tbody = document.getElementById('admin-users-list');
-            tbody.innerHTML = '';
+        function renderChannelContent(ch) {
+            const body = document.getElementById('channel-body');
+            const inputZone = document.getElementById('chat-input-zone');
+            body.innerHTML = '';
+            inputZone.classList.add('hidden');
 
-            users.forEach((u, index) => {
-                let options = Object.keys(ROLES).map(rKey => 
-                    `<option value="${rKey}" ${u.role === rKey ? 'selected' : ''}>${ROLES[rKey].name}</option>`
-                ).join('');
+            const canWrite = ch.access === 'open' || ((ch.access === 'info' || ch.access === 'closed') && (currentUser.role === 'LEADER' || currentUser.role === 'DEPUTY'));
 
-                // Лидер не может разжаловать сам себя через эту менюшку для безопасности
-                const isDisabled = u.nick === currentUser.nick; 
+            if (ch.type === 'info') {
+                body.innerHTML = `
+                    <div class="arizona-subcard p-5 text-center text-gray-500 text-xs italic my-auto">
+                        <i class="fa-solid fa-folder-open text-3xl text-gray-600 mb-3 block"></i>
+                        Раздел пока пуст. Заполняется Руководством.
+                    </div>
+                `;
+            } else {
+                if (canWrite) inputZone.classList.remove('hidden');
+                if (!ch.messages || ch.messages.length === 0) {
+                    body.innerHTML = `<div class="text-center text-gray-600 text-xs my-auto italic">Ответов в теме пока нет.</div>`;
+                } else {
+                    ch.messages.forEach(m => {
+                        let userAvatarHTML = m.user.avatar 
+                            ? `<img src="${m.user.avatar}" class="w-6 h-6 rounded-full object-cover">`
+                            : `<div class="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-[10px] text-gray-300"><i class="fa-solid fa-user"></i></div>`;
 
-                tbody.insertAdjacentHTML('beforeend', `
-                    <tr class="border-b arizona-border hover:bg-slate-800/30">
-                        <td class="p-3 font-medium">${u.nick}</td>
-                        <td class="p-3 text-gray-400 text-xs">${u.rank}</td>
-                        <td class="p-3">
-                            <span class="text-xs ${ROLES[u.role].class}">${ROLES[u.role].name}</span>
-                        </td>
-                        <td class="p-3 text-right">
-                            <select onchange="changeUserRole(${index}, this.value)" ${isDisabled ? 'disabled' : ''} class="bg-slate-800 text-xs text-gray-200 rounded p-1 border arizona-border cursor-pointer">
-                                ${options}
-                            </select>
-                        </td>
-                    </tr>
-                `);
-            });
-        }
-
-        function changeUserRole(index, newRole) {
-            users[index].role = newRole;
-            localStorage.setItem('lspd_users', JSON.stringify(users));
-            renderAdminUsers();
-            setupUI(); // Обновляем права интерфейса "на лету"
-        }
-
-        function logout() {
-            currentUser = null;
-            authStatus.innerHTML = '';
-            authModal.classList.remove('hidden');
-        }
-    </script>
-</body>
-  </html>
-  
+                        body.insertAdjacentHTML('beforeend', `
+                            <div class="arizona-subcard p-3">
+                                <div class="flex justify-between items-center mb-2 border-b border-[#222735] pb-1.5">
+                                    <div class="flex items-center gap-2">
+                                        ${userAvatarHTML}
+                          
