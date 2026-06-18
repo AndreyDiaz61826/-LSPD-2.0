@@ -110,7 +110,7 @@
                 <div class="text-xl font-black text-gray-100 tracking-wide uppercase">Вход на портал LSPD</div>
                 <p id="login-tip" class="text-xs text-gray-500 mt-1">Введите Nick_Name. Если вы впервые, аккаунт создастся автоматически.</p>
             </div>
-            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+                        <div class="space-y-4">
                 <div>
                     <label class="block text-[11px] text-gray-400 font-medium mb-1">Ник-нейм на английском (Nick_Name)</label>
                     <input id="login-nick" type="text" required placeholder="Ivan_Ivanov" class="w-full arizona-input rounded-xl p-3 text-xs text-gray-200">
@@ -123,9 +123,8 @@
                     <label id="pass-label" class="block text-[11px] text-gray-400 font-medium mb-1">Пароль</label>
                     <input id="login-pass" type="password" required placeholder="••••••••" class="w-full arizona-input rounded-xl p-3 text-xs text-gray-200">
                 </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs cursor-pointer">Подтвердить</button>
-            </form>
-        </div>
+                <button onclick="handleLogin()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs cursor-pointer">Подтвердить</button>
+            </div>
     </div>
 
     <!-- МЕНЮ УПРАВЛЕНИЯ РОЛЯМИ -->
