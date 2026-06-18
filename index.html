@@ -110,7 +110,7 @@
                 <div class="text-xl font-black text-gray-100 tracking-wide uppercase">Вход на портал LSPD</div>
                 <p id="login-tip" class="text-xs text-gray-500 mt-1">Введите Nick_Name. Если вы впервые, аккаунт создастся автоматически.</p>
             </div>
-            <form id="login-form" class="space-y-4">
+            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-[11px] text-gray-400 font-medium mb-1">Ник-нейм на английском (Nick_Name)</label>
                     <input id="login-nick" type="text" required placeholder="Ivan_Ivanov" class="w-full arizona-input rounded-xl p-3 text-xs text-gray-200">
@@ -123,7 +123,7 @@
                     <label id="pass-label" class="block text-[11px] text-gray-400 font-medium mb-1">Пароль</label>
                     <input id="login-pass" type="password" required placeholder="••••••••" class="w-full arizona-input rounded-xl p-3 text-xs text-gray-200">
                 </div>
-                <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl text-xs">Подтвердить</button>
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl text-xs cursor-pointer">Подтвердить</button>
             </form>
         </div>
     </div>
@@ -148,7 +148,6 @@
             USER: { name: 'Пользователь', class: 'role-user' }
         };
 
-        // Загрузка или создание базы данных с вашими условиями
         let users = JSON.parse(localStorage.getItem('lspd_forum_users')) || [
             { nick: 'Moskvin_Bounce', rank: 'Шеф', role: 'LEADER', pass: null, avatar: '' },
             { nick: 'Trevor_Mersor', rank: 'Главный Комиссар', role: 'DEPUTY', pass: 'Bu2MvZ96', avatar: '' }
@@ -167,7 +166,7 @@
 
         let currentUser = null;
 
-        // Следим за вводом никнейма, чтобы адаптировать форму
+        // Отслеживание ввода никнейма
         document.getElementById('login-nick').addEventListener('input', (e) => {
             const nick = e.target.value.trim();
             const user = users.find(u => u.nick.toLowerCase() === nick.toLowerCase());
@@ -175,7 +174,7 @@
             const passLabel = document.getElementById('pass-label');
 
             if (user) {
-                rankBlock.classList.add('hidden'); // Должность системных менять нельзя
+                rankBlock.classList.add('hidden');
                 if (user.nick === 'Moskvin_Bounce' && !user.pass) {
                     passLabel.innerText = "Придумайте пароль для Лидера (Первый вход)";
                 } else {
@@ -187,17 +186,19 @@
             }
         });
 
-        // Вход и регистрация
-        document.getElementById('login-form').addEventListener('submit', (e) => {
-            e.preventDefault();
+        // Функция обработки логина БЕЗ перезагрузки страницы
+        function handleLogin(event) {
+            event.preventDefault();
+            
             const nick = document.getElementById('login-nick').value.trim();
             const rank = document.getElementById('login-rank').value.trim();
             const pass = document.getElementById('login-pass').value;
 
+            if (!nick || !pass) return;
+
             let user = users.find(u => u.nick.toLowerCase() === nick.toLowerCase());
 
             if (user) {
-                // Если Москвин заходит впервые, сохраняем его новый пароль
                 if (user.nick === 'Moskvin_Bounce' && !user.pass) {
                     user.pass = pass;
                     localStorage.setItem('lspd_forum_users', JSON.stringify(users));
@@ -207,8 +208,7 @@
                     return;
                 }
             } else {
-                // Создание обычного пользователя (Авто-роль USER)
-                user = { nick, rank: rank || 'Гражданский', role: 'USER', pass: pass, avatar: '' };
+                user = { nick, rank: rank || 'Пользователь', role: 'USER', pass: pass, avatar: '' };
                 users.push(user);
                 localStorage.setItem('lspd_forum_users', JSON.stringify(users));
             }
@@ -228,15 +228,13 @@
             }
 
             renderForum();
-        });
+        }
 
-        // Изменение аватарки
         function changeAvatar() {
             if (!currentUser) return;
-            const url = prompt("Введите URL-ссылку на вашу новую аватарку (из интернета):", currentUser.avatar || "");
+            const url = prompt("Введите URL-ссылку на вашу новую аватарку:", currentUser.avatar || "");
             if (url !== null) {
                 currentUser.avatar = url.trim();
-                // Синхронизируем изменения в общем массиве пользователей
                 const idx = users.findIndex(u => u.nick === currentUser.nick);
                 if (idx !== -1) users[idx].avatar = currentUser.avatar;
                 localStorage.setItem('lspd_forum_users', JSON.stringify(users));
@@ -257,7 +255,6 @@
             }
         }
 
-        // Рендер тем/каналов
         function renderForum() {
             const container = document.getElementById('forum-view');
             container.innerHTML = '';
@@ -335,4 +332,7 @@
                                 <div class="flex justify-between items-center mb-2 border-b border-[#222735] pb-1.5">
                                     <div class="flex items-center gap-2">
                                         ${userAvatarHTML}
-                          
+                                        <span class="text-xs font-bold text-gray-200">${m.user.nick} <span class="text-[10px] font-normal text-gray-500">[${m.user.rank}]</span></span>
+                                    </div>
+                                    <span class="text-[10px] ${ROLES[m.user.role].class}">${ROLES[m.user.role].name}</span>
+  
